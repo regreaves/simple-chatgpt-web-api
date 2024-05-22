@@ -1,0 +1,21 @@
+{
+  "name": "simple-chatgpt-web-api",
+  "version": "1.0.0",
+  "description": "A Fastify server that integrates with OpenAI API to provide a ChatGPT endpoint.",
+  "main": "index.mjs",
+  "type": "module",
+  "scripts": {
+    "start": "node index.mjs"
+  },
+  "keywords": [
+    "fastify",
+    "openai",
+    "chatgpt",
+    "api"
+  ],
+  "license": "ISC",
+  "dependencies": {
+    "fastify": "^4.0.0",
+    "openai": "^4.40.2"
+  }
+}
