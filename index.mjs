@@ -1,9 +1,9 @@
 import Fastify from 'fastify';
 import openAIPlugin from './openAIPlugin.mjs';
 
-const buildServer = apiKey => {
+const buildServer = ({ apiKey, model }) => {
   const fastify = Fastify({ logger: true });
-  fastify.register(openAIPlugin, { apiKey });
+  fastify.register(openAIPlugin, { apiKey, model });
 
   fastify.post('/', async (request, reply) => {
     const result = await fastify.queryChatGPT({ query: request.body.query });
@@ -13,19 +13,10 @@ const buildServer = apiKey => {
   return fastify;
 };
 
-const startServer = async (server, port) => {
-  try {
-    await server.listen(port);
-    console.log(`Listening on port ${port}...`);
-  } catch (err) {
-    console.error(err);
-    process.exitCode = 1;
-  }
-};
-
 const main = async () => {
   const port = process.env.PORT || 3000;
   const apiKey = process.env.OPENAI_API_KEY;
+  const model = process.env.MODEL || 'gpt-3.5-turbo';  
   
   if (!apiKey) {
     console.error('OPENAI_API_KEY is required');
@@ -33,8 +24,15 @@ const main = async () => {
     return;
   }
 
-  const server = buildServer(apiKey);
-  await startServer(server, port);
+  const server = buildServer({ apiKey, model });
+  server.listen(port, err => {
+    if (err) {
+      console.error(err);
+      process.exitCode = 1;
+      return;
+    }
+    console.log(`Server listening on port ${port}`);
+  });
 };
 
 main();
