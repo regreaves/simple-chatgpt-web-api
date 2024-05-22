@@ -25,7 +25,7 @@ const main = async () => {
   }
 
   const server = buildServer({ apiKey, model });
-  server.listen(port, err => {
+  server.listen({ port }, err => {
     if (err) {
       console.error(err);
       process.exitCode = 1;
